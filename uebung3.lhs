@@ -144,18 +144,33 @@ Mit dieser Funktion wird überprüft, ob eine Variable 'x' im Inneren der
 Funktion 'f' vorkommt.
 
 > differencePair :: Term -> Term -> Maybe (Term, Term)
-> differencePair (VarT x) (VarT y) | x == y    = Nothing
->                                  | otherwise = Just (VarT x, VarT y)
+> differencePair (VarT x) (VarT y)
+>     | x == y    = Nothing
+>     | otherwise = Just (VarT x, VarT y)
 > differencePair (FuncT f fs) (VarT x) = Just (VarT x, FuncT f fs)
 > differencePair (VarT x) (FuncT f fs) = Just (VarT x, FuncT f fs)
 > differencePair t1@(FuncT f fs) t2@(FuncT g gs)
->                                          | t1 == t2  = Nothing
->                                          | f == g    = head $ filter (/= Nothing) $ zipWith differencePair fs gs
->                                          | otherwise = error "unification impossible (different symbols at root)"
->
+>     | t1 == t2  = Nothing
+>     | f == g    = head $ filter (/= Nothing) $ zipWith differencePair fs gs
+>     | otherwise = error "unification impossible (different symbols at root)"
+
+Mit der Funktion 'differencePair' wird das erste Unterscheidungspaar von zwei
+Termen bestimmt. Dieses wird als Paar (Variable, Term) zurückgegeben, gekapselt
+im Maybe-Monad, d.h. falls keine Unterscheidunsgpaare existieren, so ist der
+Rückgabewert 'Nothing'. Die Funktion liefert außerdem einen Fehler, falls zwei
+Terme mit unterschiedlichen Symbolen an der Wurzel verglichen werden. Dies ist
+einer der beiden Überprüfungsschritte, ob die Terme unifizierbar sind.
+
 > unify :: Term -> Term -> Term
-> unify t1 t2 = case differencePair t1 t2 of
->                  Nothing      -> t1
->                  Just (x, t)  -> if occurs x t
->                                  then error "unification impossible (occurs check)"
->                                  else unify (substitute x t t1) (substitute x t t2)
+> unify t1 t2 =
+>     case differencePair t1 t2 of
+>         Nothing      -> t1
+>         Just (x, t)  -> if occurs x t
+>             then error "unification impossible (occurs check)"
+>             else unify (substitute x t t1) (substitute x t t2)
+
+Schließlich führt 'unify' die Unifikation nach Robinson-Algorithmus durch. Es
+wird ein Unterscheidungspaar gesucht und der Occurs-Check durchgeführt (zweiter
+Überprüfungsschritt). Daraufhin wird auf beiden Input-Termen die Substitution
+durchgeführt und auf die damit entstandenen Terme wiederum 'unify' rekursiv
+angewendet, bis kein Unterscheidungspaar mehr gefunden wird.
