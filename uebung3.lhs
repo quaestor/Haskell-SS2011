@@ -14,10 +14,11 @@
 > power _ Zero'     = Succ' Zero'
 > power (Succ' x) y = mult' y $ power x y
 
-2. Schreiben Sie ein Programm, das die Ho ̈he eines bina ̈ren Baumes ausrechnet.
+2. Schreiben Sie ein Programm, das die Höhe eines binären Baumes ausrechnet.
 
 > data StandBinTree a = EmptyBinTree | Node(a, StandBinTree a,
 >                                              StandBinTree a)
+>
 > height :: StandBinTree a -> Int
 > height EmptyBinTree     = 0
 > height (Node (_, a, b)) = 1 + max (height a) (height b)
@@ -26,6 +27,7 @@
    Zeile für sich schreibt und die Unterknoten um drei Anschläge gegenüber dem
    übergeordneten einrückt.
 
+> showTree :: StandBinTree a -> String
 > showTree n = showTree' 0 n
 >    where showTree' i EmptyBinTree = "( )"
 >          showTree' i (Node (v, l, r)) =
@@ -40,6 +42,7 @@
 >     where
 >     show t = shows' id t ""
 >
+> shows' :: (Show a) => (String -> String) -> StandBinTree a -> (String -> String)
 > shows' _  EmptyBinTree     = ("-( )\n"++)
 > shows' ss (Node (p, l, r)) =
 >     let s'  = ("-("++) . shows p . (")+"++) -- Knoten ausgeben
@@ -61,7 +64,7 @@
 > concreteList = [IntElem 42, CharElem 'q']
 
     (b) Schreiben Sie Funktionen, die die Teilliste der Integer-Elemente bzw.
-        die Teilliste der Char-Elemente heraussucht.
+        die Teilliste der Char-Elemente heraussuchen.
 
 > intElems :: [ListElement] -> [Integer]
 > intElems [] = []
