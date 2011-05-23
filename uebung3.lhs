@@ -12,7 +12,7 @@
 > mult' (Succ' x) y = add' y $ mult' x y
 >
 > power _ Zero'     = Succ' Zero'
-> power x (Succ' y) = mult' x $ power x y
+> power (Succ' x) y = mult' y $ power x y
 
 2. Schreiben Sie ein Programm, das die Ho ̈he eines bina ̈ren Baumes ausrechnet.
 
