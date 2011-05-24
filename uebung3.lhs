@@ -1,4 +1,4 @@
-Übung 3 -- Christoph Rauch
+﻿Übung 3 -- Christoph Rauch
 
 1. Schreiben Sie für den Datentyp Nat' die Funktionen mult' zur Multiplikation
    und power zur Potenzierung
@@ -141,6 +141,7 @@ der Bezeichnung 'f' durch den Term 't'.
 
 > occurs :: Term -> Term -> Bool
 > occurs (VarT x) (FuncT f fs) = or $ map (occurs (VarT x)) fs
+> occurs (VarT x) (VarT y) = x == y
 > occurs _ _ = False
 
 Mit dieser Funktion wird überprüft, ob eine Variable 'x' im Inneren der
