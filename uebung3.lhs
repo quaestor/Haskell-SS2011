@@ -27,7 +27,7 @@
    Zeile für sich schreibt und die Unterknoten um drei Anschläge gegenüber dem
    übergeordneten einrückt.
 
-> showTree :: StandBinTree a -> String
+> showTree :: (Show a) => StandBinTree a -> String
 > showTree n = showTree' 0 n
 >    where showTree' i EmptyBinTree = "( )"
 >          showTree' i (Node (v, l, r)) =
