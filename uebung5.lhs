@@ -128,8 +128,11 @@
 >
 >   showArbTree a = showArbTree' [a]
 >   showArbTree' [] = ""
->   showArbTree' fs = (concat $ intersperse " " $ 
->                     map (\x -> if isEmptyTree x then (\y -> "|") x else show $ root x) neighbours) ++ "\n" ++
+>   showArbTree' fs = (intercalate " " $ 
+>                     map (\x -> if isEmptyTree x
+>                                   then (\y -> "|") x
+>                                   else show $ root x) neighbours)
+>                     ++ "\n" ++
 >                     (showArbTree' firstsuccs)
->      where neighbours = concat $ intersperse [EmptyBinTree] [takeWhile (\x -> not $ isEmptyTree x) (iterate neighbour n) | n <- fs]
->            firstsuccs = filter (\x -> not $ isEmptyTree x) (map firstSucc neighbours)
+>      where neighbours = intercalate [EmptyBinTree] [takeWhile (\x -> not $ isEmptyTree x) (iterate neighbour n) | n <- fs]
+>            firstsuccs = filter (not . isEmptyTree) (map firstSucc neighbours)
